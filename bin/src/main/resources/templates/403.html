@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	lang="fr">
+<head>
+	<meta name="author" content="">
+	<meta name="description" content="">
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Guichet de d'offre et de demande d'emplois</title>
+	<!-- Favicon Icon -->
+	<link rel="shortcut icon" href="../static/img/favicon.png" th:href="@{/img/favicon.png}" />
+	<!-- CSS -->
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootstrap.min.css" th:href="@{/plugins/bootstrap/css/bootstrap.min.css}">
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootstrap-select.min.css" th:href="@{/plugins/bootstrap/css/bootstrap-select.min.css}">
+	<link rel="stylesheet" href="../static/plugins/icons/css/icons.css" th:href="@{/plugins/icons/css/icons.css}">
+	<link rel="stylesheet" href="../static/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootsnav.css" th:href="@{/plugins/bootstrap/css/bootsnav.css}">
+	<link rel="stylesheet" href="../static/plugins/nice-select/css/nice-select.css" th:href="@{/plugins/nice-select/css/nice-select.css}">
+	<link rel="stylesheet" href="../static/plugins/aos-master/aos.css" th:href="@{/plugins/aos-master/aos.css}">
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	<link rel="stylesheet" href="../static/css/responsive.css" th:href="@{/css/responsive.css}">
+	<!-- Google Fonts -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap"> 
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap"> 
+</head>
+<body class="home-2">
+<div class="wrapper">
+  <section>
+    <div class="container">
+      <div class="error-page padd-top-30 padd-bot-30">
+        <h1 class="mrg-top-15 mrg-bot-0 cl-danger font-150 font-bold">403</h1>
+        <h2 class="mrg-top-10 mrg-bot-5 funky-font font-40">Accés Refusé !</h2>
+        <p>Désolé, vous n'avez pas le droit d'accéder à cette page</p>
+		<span>Cette page que vous demandez nécessite plus d'authorisation que vous n'en disposé.</span>
+        <a th:href="@{/index}" class="btn theme-btn-trans mrg-top-20">Retour à la page d'accueil</a> 
+	  </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

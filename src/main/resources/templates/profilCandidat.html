@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="fr">
+<head>
+	<meta name="author" content="">
+	<meta name="description" content="">
+	<meta http-equiv="Content-Type"content="text/html;charset=UTF-8"/>
+	<meta name="viewport"content="width=device-width, initial-scale=1.0">
+	<title>Guichet de d'offre et de demande d'emplois</title>
+	<!-- Favicon Icon -->
+	<link rel="shortcut icon" href="../static/img/favicon.png" th:href="@{/img/favicon.png}" />
+	<!-- CSS -->
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootstrap.min.css" th:href="@{/plugins/bootstrap/css/bootstrap.min.css}">
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootstrap-select.min.css" th:href="@{/plugins/bootstrap/css/bootstrap-select.min.css}">
+	<link rel="stylesheet" href="../static/plugins/icons/css/icons.css" th:href="@{/plugins/icons/css/icons.css}">
+	<link rel="stylesheet" href="../static/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootsnav.css" th:href="@{/plugins/bootstrap/css/bootsnav.css}">
+	<link rel="stylesheet" href="../static/plugins/nice-select/css/nice-select.css" th:href="@{/plugins/nice-select/css/nice-select.css}">
+	<link rel="stylesheet" href="../static/plugins/aos-master/aos.css" th:href="@{/plugins/aos-master/aos.css}">
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	<link rel="stylesheet" href="../static/css/responsive.css" th:href="@{/css/responsive.css}">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap" rel="stylesheet"> 
+</head>
+<body class="utf_skin_area">
+<div class="page_preloader"></div>
+<!-- ======================= Start Navigation ===================== -->
+<nav class="navbar navbar-default navbar-mobile navbar-fixed light bootsnav">
+  <div class="container">     
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu"> <i class="fa fa-bars"></i> </button>
+      <a class="navbar-brand" th:href="@{/index}"> <img th:src="@{/img/logo-light.png}" class="logo logo-display" alt="logo"> <img th:src="@{/img/logo.png}" class="logo logo-scrolled" alt="logo"> </a>
+	</div>
+    <div class="collapse navbar-collapse" id="navbar-menu">
+      <ul class="nav navbar-nav navbar-left" data-in="fadeInDown" data-out="fadeOutUp">
+        <li class="dropdown active"> <a th:href="@{/index}">Accueil</a> </li>
+        <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Recruteurs</a>
+          <ul class="dropdown-menu animated fadeOutUp">
+            <li><a th:href="@{/entreprises}">Entreprises</a></li>
+            <li><a th:href="@{/formRecruteur}">Enregistrer son entreprise</a></li>
+            <li><a th:href="@{/formEmploi}">Publier une annonce</a></li>
+          </ul>
+        </li>
+        <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Candidats</a>
+          <ul class="dropdown-menu animated fadeOutUp">
+            <li><a th:href="@{/candidats}">Candidats</a></li>
+            <li><a th:href="@{/listeEmplois}">Offres d'emploi</a></li>
+            <li><a th:href="@{/profil}">Mon compte</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown sign-up"> 
+		  <a class="dropdown-toggle btn-signup red-btn" data-toggle="dropdown" href="#" th:each="c:${candidat}"> 
+			<img th:src="@{${c.photoPath}}" class="img-responsive img-circle" th:alt="${c.utilisateur.nom}"><span th:text="${c.utilisateur.username}"></span>
+		  </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- ======================= End Navigation ===================== --> 
+
+<!-- ======================= Page Title ===================== -->
+<div class="page-title">
+  <div class="container">
+    <div class="page-caption">
+      <h2>Profil du candidat</h2>
+      <p><a href="#" title="Accueil">Accueil</a> <i class="ti-angle-double-right"></i> Profil</p>
+    </div>
+  </div>
+</div>
+<!-- ======================= End Page Title ===================== --> 
+
+<!-- ================ Profile Settings ======================= -->
+<section class="padd-top-80 padd-bot-80">
+  <div class="container">
+    <div class="row"> 
+      <div class="col-md-3">
+		<div id="leftcol_item">
+		  <div class="user_dashboard_pic" th:each="c:${candidat}"> <img th:src="@{${c.photoPath}}" th:alt="${c.utilisateur.nom}"></div>
+		</div>
+		<div class="dashboard_nav_item" th:each="c:${candidat}">
+		  <h5 style="font-size: 18px;">Prénom : <span th:text="${c.utilisateur.prenom}" style="font-style: italic;"></span></h5>
+		  <h5 style="font-size: 18px;">Nom: <span th:text="${c.utilisateur.nom}" style="font-style: italic;"></span></h5>
+		  <h5 style="font-size: 18px;">N° mobile: <span th:text="${c.utilisateur.mobile}" style="font-style: italic;"></span></h5>
+		  <h5 style="font-size: 18px;">Niveau d'étude: <span th:text="${c.etude}" style="font-style: italic;"></span></h5>
+		</div>
+	  </div>
+	  <div class="col-md-9">
+        <div id="dashboard_listing_blcok">
+		  <div class="col-md-12 col-sm-12">
+		  	<div class="detail-wrapper">
+	          <div class="detail-wrapper-header">
+	            <h4>Formations</h4>
+	          </div>
+	          <div class="detail-wrapper-body">
+	            <div class="edu-history info" th:each="f:${formations}"> <i></i>
+	              <div class="detail-info">
+	                <h3 th:text="${f.titre}" style="font-size: 20px; font-family: 700; font-weight: bold;"></h3>
+	                <span style="margin-top: 10px; font-size: 18px; font-family: 700;">Du <i th:text="${f.debut}"></i> Au <i th:text="${f.fin}"></i></span><br>
+	                <span th:text="${f.etablissement}" style="margin-top: 10px; font-size: 18px; font-family: 700; font-weight: bold;"></span>
+	                <p th:text="${f.description}" style="font-size: 18px; font-family: 700;"></p>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+		  </div>
+		  <div class="col-md-12 col-sm-12">
+			<div class="detail-wrapper">
+	          <div class="detail-wrapper-header">
+	            <h4>Expériences professionnelle</h4>
+	          </div>
+	          <div class="detail-wrapper-body">
+	            <div class="edu-history info" th:each="e:${experiences}"> <i></i>
+	              <div class="detail-info">
+	                <h3 th:text="${e.intitule}" style="font-size: 20px; font-family: 700; font-weight: bold;"></h3>
+	                <span style="margin-top: 10px; font-size: 18px; font-family: 700;">Du <i th:text="${e.debut}"></i> Au <i th:text="${e.fin}"></i></span><br>
+	                <span th:text="${e.entreprise}" style="margin-top: 10px; font-size: 18px; font-family: 700; font-weight: bold;"></span>
+	                <p th:text="${e.description}" style="font-size: 18px; font-family: 700;"></p>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+		  </div>
+		  <div class="col-md-12 col-sm-12">
+			<div class="detail-wrapper">
+	          <div class="detail-wrapper-header">
+	            <h4>Critères de recherche</h4>
+	          </div>
+	          <div class="detail-wrapper-body">
+	            <ul class="detail-list" th:each="c:${critere}">
+	              <li style="font-size: 18px; font-family: 700;"> Type de contrat recherché :
+	              	<label th:text="${c.type_contrat}" style="font-weight: bold;"></label>
+	              </li>
+	              <li style="font-size: 18px; font-family: 700;"> Disponibilité :
+	              	<label th:text="${c.disponibilite}" style="font-weight: bold;"></label>
+	              </li>
+	              <li style="font-size: 18px; font-family: 700;"> Rénumération souhaité :
+	              	<label th:text="${c.renumeration}" style="font-weight: bold;"></label>
+	              </li> 
+	              <li style="font-size: 18px; font-family: 700;"> Mobilité géographique :
+	              	<ul th:each="r:${regions}">
+	              		<li th:text="${r.nom}" style="font-size: 18px; font-family: 700; font-weight: bold;"></li>
+	              	</ul>
+	              </li>
+	              <li style="font-size: 18px; font-family: 700;"> Métiers recherchés :
+	              	<ul th:each="m:${metiers}">
+	              		<li th:text="${m.nom}" style="font-size: 18px; font-family: 700; font-weight: bold;"></li>
+	              	</ul>
+	              </li> 
+	              <li style="font-size: 18px; font-family: 700;">Secteurs recherchés :
+	              	<ul th:each="s:${secteurs}">
+	              		<li th:text="${s.nom}" style="font-size: 18px; font-family: 700; font-weight: bold;"></li>
+	              	</ul>
+	              </li>
+	            </ul>
+	          </div>
+	        </div>
+		  </div>
+		</div>
+      </div>	 
+    </div>
+  </div>
+</section>
+<!-- ================ End Profile Settings ======================= --> 
+
+<!-- ================= footer start ========================= -->
+<footer class="footer">
+  <div class="container"> 
+    <div class="row">
+	  <div class="col-md-4 col-sm-4">
+        <a th:href="@{/index}"><img class="footer-logo" src="img/logo.png" alt="logo"></a>
+        <p>Lorem Ipsum is simply dummy text of printing and type setting industry. Lorem Ipsum been industry standard dummy text ever since.</p> 
+      </div>	
+      <div class="col-md-8 col-sm-8">
+        <div class="row">
+          <div class="col-md-4 col-sm-6">
+            <h4>Informations</h4>
+            <ul>
+              <li><a target="_blank" href="http://localhost/GuichetOrientationInsertion/propos.php"><i class="fa fa-angle-double-right"></i> Qui sommes-nous?</a></li>
+              <li><a target="_blank" href="http://localhost/GuichetOrientationInsertion/contact.php"><i class="fa fa-angle-double-right"></i> Support</a></li>
+              <li><a target="_blank" href="http://localhost/GuichetOrientationInsertion/contact.php"><i class="fa fa-angle-double-right"></i> Contact</a></li>
+            </ul>
+          </div>
+		  <div class="col-md-4 col-sm-6">
+            <h4>Conditions</h4>
+            <ul>
+              <li><a target="_blank" href="#"><i class="fa fa-angle-double-right"></i> Conditions Générales d'utilisation</a></li>
+              <li><a target="_blank" href="#"><i class="fa fa-angle-double-right"></i> Données personnelles</a></li>
+              <li><a target="_blank" href="#"><i class="fa fa-angle-double-right"></i> Mention légale</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <h4>Réseaux sociaux</h4>
+            <p>Vous pouvez nous suivre sur facebook, linkedin, twitter et instagram.</p>
+            <div class="f-social-box">
+	          <ul>
+	            <li><a href="#"><i class="fa fa-facebook facebook-cl"></i></a></li>
+	            <li><a href="#"><i class="fa fa-linkedin linkedin-cl"></i></a></li>
+	            <li><a href="#"><i class="fa fa-twitter twitter-cl"></i></a></li>
+	            <li><a href="#"><i class="fa fa-instagram instagram-cl"></i></a></li>
+	          </ul>
+	        </div>    
+          </div>
+        </div>
+      </div>      
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="copyright text-center">
+          <p>© 2021 <a target="_blank" href="http://graim.sn/">GRAIM</a> Tous droits réservés.</p>		  
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div><a href="#" class="scrollup">Scroll</a></div>
+
+<!-- Jquery js--> 
+<script src="js/jquery.min.js"></script> 
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script> 
+<script src="plugins/bootstrap/js/bootsnav.js"></script> 
+<script src="js/viewportchecker.js"></script> 
+<script src="js/slick.js"></script> 
+<script src="plugins/bootstrap/js/wysihtml5-0.3.0.js"></script> 
+<script src="plugins/bootstrap/js/bootstrap-wysihtml5.js"></script> 
+<script src="plugins/aos-master/aos.js"></script> 
+<script src="plugins/nice-select/js/jquery.nice-select.min.js"></script> 
+<script src="js/custom.js"></script> 
+<script>
+	$(window).load(function() {
+	  $(".page_preloader").fadeOut("slow");;
+	});	
+	AOS.init();
+</script> 
+<script>
+	$('#dob').dateDropper();
+</script>
+</body>
+</html>

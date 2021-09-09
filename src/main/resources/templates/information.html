@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="fr">
+<head>
+	<meta name="author" content="">
+	<meta name="description" content="">
+	<meta http-equiv="Content-Type"content="text/html;charset=UTF-8"/>
+	<meta name="viewport"content="width=device-width, initial-scale=1.0">
+	<title>Guichet de d'offre et de demande d'emplois</title>
+	<!-- Favicon Icon -->
+	<link rel="shortcut icon" href="../static/img/favicon.png" th:href="@{/img/favicon.png}" />
+	<!-- CSS -->
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootstrap.min.css" th:href="@{/plugins/bootstrap/css/bootstrap.min.css}">
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootstrap-select.min.css" th:href="@{/plugins/bootstrap/css/bootstrap-select.min.css}">
+	<link rel="stylesheet" href="../static/plugins/icons/css/icons.css" th:href="@{/plugins/icons/css/icons.css}">
+	<link rel="stylesheet" href="../static/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootsnav.css" th:href="@{/plugins/bootstrap/css/bootsnav.css}">
+	<link rel="stylesheet" href="../static/plugins/nice-select/css/nice-select.css" th:href="@{/plugins/nice-select/css/nice-select.css}">
+	<link rel="stylesheet" href="../static/plugins/aos-master/aos.css" th:href="@{/plugins/aos-master/aos.css}">
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	<link rel="stylesheet" href="../static/css/responsive.css" th:href="@{/css/responsive.css}">
+	<link rel="stylesheet" href="../static/css/info.css" th:href="@{/css/info.css}">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap" rel="stylesheet"> 
+	<link href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" rel="stylesheet">
+</head>
+<body class="utf_skin_area">
+<div class="page_preloader"></div>
+<!-- ======================= Start Navigation ===================== -->
+<nav class="navbar navbar-default navbar-mobile navbar-fixed light bootsnav">
+  <div class="container">     
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu"> <i class="fa fa-bars"></i> </button>
+      <a class="navbar-brand" th:href="@{/index}"> <img th:src="@{/img/logo-light.png}" class="logo logo-display" alt="logo"> <img th:src="@{/img/logo.png}" class="logo logo-scrolled" alt="logo"> </a>
+	</div>
+    <div class="collapse navbar-collapse" id="navbar-menu">
+      <ul class="nav navbar-nav navbar-left" data-in="fadeInDown" data-out="fadeOutUp">
+        <li class="dropdown"> <a th:href="@{/index}">Accueil</a> </li>
+        <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Recruteurs</a>
+          <ul class="dropdown-menu animated fadeOutUp">
+            <li><a th:href="@{/entreprises}">Entreprises</a></li>
+            <li><a th:href="@{/formRecruteur}">Enregistrer son entreprise</a></li>
+            <li><a th:href="@{/formEmploi}">Publier une annonce</a></li>
+          </ul>
+        </li>
+        <li class="dropdown active"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Candidats</a>
+          <ul class="dropdown-menu animated fadeOutUp">
+            <li><a th:href="@{/candidats}">Candidats</a></li>
+            <li><a th:href="@{/listeEmplois}">Offres d'emploi</a></li>
+            <li><a th:href="@{/profil}">Mon compte</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown sign-up"> 
+		  <a class="dropdown-toggle btn-signup red-btn" data-toggle="dropdown" href="#" th:each="c:${candidat}"> 
+			<span th:text="${#request.userPrincipal.name}"></span>
+		  </a>
+          <ul class="dropdown-menu animated fadeOutUp">
+            <li><a th:if="${#request.userPrincipal!=null}" th:href="@{/logout}">Déconnexion</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- ======================= End Navigation ===================== --> 
+
+<!-- ======================= Page Title ===================== -->
+<div class="page-title">
+  <div class="container">
+    <div class="page-caption">
+      <h2>Profil du candidat</h2>
+      <p><a href="#" title="Accueil">Accueil</a> <i class="ti-angle-double-right"></i> Profil</p>
+    </div>
+  </div>
+</div>
+<!-- ======================= End Page Title ===================== --> 
+
+<!-- ================ Profile Settings ======================= -->
+<section class="padd-top-80 padd-bot-80">
+  <div class="container">
+    <div class="row"> 
+      <div class="col-md-3">
+		<div class="dashboard_nav_item">
+		  <ul>
+		    <li><a th:href="@{/profil}"><i class="login-icon ti-dashboard"></i> Tableau de bord</a></li>
+			<li class="active"><a th:href="@{/complement}"><i class="login-icon ti-user"></i> Mon profil et cv</a></li>
+			<li><a th:href="@{/suivi}"><i class="login-icon fa fa-check"></i> Suivi candidatures</a></li>
+		  </ul>
+		</div>
+	  </div>
+	  <div class="col-md-9">
+	  	<div class="wizard"> 
+          <div class="wizard-inner">
+            <div class="connecting-line"></div>
+            <ul class="nav nav-tabs" role="tablist">
+		        <li role="presentation" class="active">
+		          <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Profil">
+		            <span class="round-tab">
+		               <i class="glyphicon glyphicon-folder-open"></i>
+		            </span>
+		          </a>
+		        </li>
+		        <li role="presentation" class="disabled">
+		          <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Formations">
+		            <span class="round-tab">
+		               <i class="glyphicon glyphicon-education"></i>
+		            </span>
+		          </a>
+		        </li>
+		        <li role="presentation" class="disabled">
+		           <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="Expériences">
+		              <span class="round-tab">
+		         	      <i class="glyphicon glyphicon-briefcase"></i>
+		              </span>
+		           </a>
+		        </li>
+		        <li role="presentation" class="disabled">
+		           <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Information">
+		              <span class="round-tab">
+		         	      <i class="glyphicon glyphicon-ok"></i>
+		              </span>
+		           </a>
+		        </li>
+             </ul>
+            </div>
+            <form class="c-form" th:action="@{saveCandidat}" method="post" th:object="${candidat}" enctype="multipart/form-data">
+                <div class="tab-content">
+                    <div class="tab-pane active" role="tabpanel" id="step1">
+                        <!-- Curriculum vitae -->
+					    <div class="box">
+					        <div class="box-header">
+					          <h4>MON CV</h4>
+					        </div>
+					        <div class="box-body">
+					          <div class="row">
+					            <div class="col-md-12 col-sm-12 col-xs-12">
+					              <label style="font-size: 20px; font-weight: 600;">Joignez votre CV <span style="color: #f21136; font-size: 22px; font-weight: 900;">*</span></label>
+					              <p>Les fichiers doivent peser moins de 500ko.<br>
+					              Extensions autorisées: .pdf, .doc.
+					              </p>
+					              <div class="custom-file-upload" th:classappend="${#fields.hasErrors('cv')} ? 'has-error'">
+					                <input type="file" id="file" name="file" required="required" accept=""/>
+					                <label class="error" th:errors="*{cv}">[error]</label>
+					              </div>
+					            </div>
+					          </div>
+					        </div>
+					    </div>
+					      
+					    <!-- Photo -->
+					    <div class="box">
+					        <div class="box-header">
+					          <h4>MA PHOTO</h4>
+					        </div>
+					        <div class="box-body">
+					          <div class="row">            
+					            <div class="col-md-12 col-sm-12 col-xs-12">
+					              <label style="font-size: 20px; font-weight: 600;">Joignez votre photo <span style="color: #f21136; font-size: 22px; font-weight: 900;">*</span></label>
+					              <p>Les fichiers doivent peser moins de 500ko.<br>
+					              Extensions autorisées: .jpeg, .png,
+					              </p>
+					              <div class="custom-file-upload" th:classappend="${#fields.hasErrors('photo')} ? 'has-error'">
+					                <input type="file" id="file" name="picture" required="required" accept="image/png, image/jpeg"/>
+					                <label class="error" th:errors="*{photo}"></label>
+					              </div>
+					            </div>
+					          </div>
+					        </div>
+					    </div>
+					      
+					    <!-- Qualification -->
+					    <div class="box">
+					        <div class="box-header">
+					          <h4>QUALIFICATION</h4>
+					        </div>
+					        <div class="box-body">
+					          <div class="row">
+					      		<div class="col-md-12 col-sm-12 col-xs-12" th:classappend="${#fields.hasErrors('etude')} ? 'has-error'">
+					              <label style="font-size: 20px; font-weight: 600;">Niveau d'études <span style="color: #f21136; font-size: 22px; font-weight: 900;">*</span></label>
+					               <select class="wide form-control" name="etude" required="required">
+					                <option data-display="Votre niveau d'étude" value="0">Votre niveau d'étude</option>
+					                <option value="sans diplome">Sans diplôme</option>
+						           	<option value="qualification avant bac">Qualification avant bac</option>
+						           	<option value="bac">Bac</option>
+						           	<option value="bac+3">Bac+3</option>
+						           	<option value="bac+5">Bac+5</option>
+						           	<option value="bac+5 et plus">Bac+5 et plus</option>
+						           </select>
+						           <label class="error" th:errors="*{etude}"></label>
+					            </div>
+					          </div>
+					        </div>
+					    </div>      
+					      
+					    <!-- Expérience -->
+					    <div class="box">
+					        <div class="box-header">
+					          <h4>EXPERIENCE</h4>
+					        </div>
+					        <div class="box-body">
+					          <div class="row">
+					      		<div class="col-md-12 col-sm-12 col-xs-12" th:classappend="${#fields.hasErrors('experience')} ? 'has-error'">
+					              <label style="font-size: 20px; font-weight: 600;">Niveau d'expérience global <span style="color: #f21136; font-size: 22px; font-weight: 900;">*</span></label>
+					              <select class="wide form-control" name="experience" required="required">
+					              	<option data-display="Votre niveau d'expérience" value="0">Votre niveau d'expérience</option>
+						           	<option value="sans experience">Sans expérience</option>
+						           	<option value="etudiant">Etudiant, jeune diplômé</option>
+						           	<option value="2 ans">Débutant &#139; 2 ans</option>
+						           	<option value="2 ans et 5 ans">Expérience entre 2 ans et 5 ans</option>
+						           	<option value="5 ans et 10 ans">Expérience entre 5 ans et 10 ans</option>
+						           	<option value="> 10 ans">Expérience &#155; 10 ans</option>
+						          </select>
+						          <label class="error" th:errors="*{experience}"></label>
+					            </div>
+					          </div>
+					        </div>
+					    </div>      
+					      
+					    <!-- Competences lingustiques -->
+					    <div class="box">
+					        <div class="box-header">
+					          <h4>COMPETENCES LINGUSTIQUES</h4>
+					        </div>
+					        <div class="box-body">
+					          <div class="row">
+					            <div class="col-md-12 col-sm-12 col-xs-12" th:classappend="${#fields.hasErrors('langue')} ? 'has-error'">
+					              <label style="font-size: 20px; font-weight: 600;">Langues parlées<span style="color: #f21136; font-size: 22px; font-weight: 900;">*</span></label>
+					              <input type="text" class="form-control" name="langue[]" placeholder="Lister vos langues par niveau séparées par des virgules(Ex: Wolof,Sérére,Diola)" required="required">
+				              	  <label class="error" th:errors="*{langue}"></label>
+					            </div>
+					            <div class="col-md-12 col-sm-12 col-xs-12" th:classappend="${#fields.hasErrors('niveauLangue')} ? 'has-error'">
+					              <label style="font-size: 20px; font-weight: 600;">Niveau<span style="color: #f21136; font-size: 22px; font-weight: 900;">*</span></label>
+					              <input type="text" class="form-control" name="niveauLangue[]" placeholder="Indiquer le niveau de chaque langue séparé par des virgules(Ex: Bon niveau,Maternelle,Intermédiaire,Débutant(e))" required="required">
+				              	  <label class="error" th:errors="*{niveauLangue}"></label>
+					            </div>
+					          </div>
+					        </div>
+					    </div>
+                        <ul class="list-inline pull-right">
+                            <li><button type="button" class="btn btn-primary next-step">Continuer</button></li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="step2">
+                      <div class="table-responsive update-formations">
+                        	<table class="table table-lg table-hover">
+                        		<thead>
+						          <tr>
+						            <th>
+                                    	<button type="button" name="addFormation" class="btn btn-outline-success" data-update-formations-url="/addFormation">
+                                        	<i class="fas fa-plus"></i>
+                                        </button>
+                                    </th>
+						          </tr>
+						        </thead>
+						        <tbody id="tblFormations">
+						        	<tr th:fragment="formations" th:each="formation,rowStat : ${candidat.formations}">
+						        		<td>
+						        			<div class="col-md-12 col-sm-12 col-xs-12">
+						        				<input type="hidden" th:field="${candidat.formations[__${rowStat.index}__].id}">
+						        			</div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                            	<label>Début</label>
+                                            	<input type="month" class="form-control" th:field="${candidat.formations[__${rowStat.index}__].debut}" required="required"/>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                            	<label>Fin</label>
+                                            	<input type="month" class="form-control" th:field="${candidat.formations[__${rowStat.index}__].fin}" required="required"/>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                            	<input type="text" class="form-control" th:field="${candidat.formations[__${rowStat.index}__].titre}" placeholder="Titre de la formation" required="required"/>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                            	<input type="text" class="form-control" th:field="${candidat.formations[__${rowStat.index}__].etablissement}" placeholder="Le nom de l'établissement ou de l'université" required="required"/>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                            	<textarea class="form-control" rows="4" th:field="${candidat.formations[__${rowStat.index}__].description}" placeholder="Description de votre formation" required="required"></textarea>
+                                            </div>	
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" name="removeFormation" th:value="${rowStat.index}" class="btn btn-outline-danger" data-update-formations-url="/removeFormation">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+						        	</tr>
+						        </tbody>
+                        	</table>
+                        </div>
+                        <ul class="list-inline pull-right">
+                            <li><button type="button" class="btn btn-default prev-step">Précédent</button></li>
+                            <li><button type="button" class="btn btn-primary next-step">Suivant</button></li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="step3">
+                        <div class="table-responsive update-experiences">
+                        	<table class="table table-lg table-hover">
+                        		<thead>
+						          <tr>
+						            <th>
+                                    	<button type="button" name="addExperience" class="btn btn-outline-success" data-update-experiences-url="/addExperience">
+                                        	<i class="fas fa-plus"></i>
+                                        </button>
+                                    </th>
+						          </tr>
+						        </thead>
+						        <tbody id="tblExperiences">
+						        	<tr th:fragment="experiences" th:each="experience,rowStat : ${candidat.experiences}">
+						        		<td>
+						        			<div class="col-md-12 col-sm-12 col-xs-12">
+						        				<input type="hidden" th:field="${candidat.experiences[__${rowStat.index}__].id}">
+						        			</div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                            	<label>Début</label>
+                                            	<input type="month" class="form-control" th:field="${candidat.experiences[__${rowStat.index}__].debut}" required="required"/>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                            	<label>Fin</label>
+                                            	<input type="month" class="form-control" th:field="${candidat.experiences[__${rowStat.index}__].fin}" required="required"/>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                            	<input type="text" class="form-control" th:field="${candidat.experiences[__${rowStat.index}__].intitule}" placeholder="L'intitulé du poste" required="required"/>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                            	<input type="text" class="form-control" th:field="${candidat.experiences[__${rowStat.index}__].entreprise}" placeholder="Le nom de l'entreprise" required="required"/>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                            	<textarea class="form-control" rows="4" th:field="${candidat.experiences[__${rowStat.index}__].description}" placeholder="Description de votre mission" required="required"></textarea>
+                                            </div>                                        	
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" name="removeExperience" th:value="${rowStat.index}" class="btn btn-outline-danger" data-update-experiences-url="/removeExperience">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+						        	</tr>
+						        </tbody>
+                        	</table>
+                        </div>
+                        <ul class="list-inline pull-right">
+                            <li><button type="button" class="btn btn-default prev-step">Précédent</button></li>
+                            <li><button type="button" class="btn btn-primary next-step">Suivant</button></li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="complete">
+                        <div class="table-responsive update-experiences">
+                        	<p style="text-align: center; font-size: 20px; font-family: 800;">En cliquant sur le bouton enregistrer, vous acceptez qu'on sauvegarde vos informations et qu'on puisse les envoyés quand vous postulez à un offre.</p>
+                        </div>
+                        <ul class="list-inline pull-right">
+                            <li><button type="button" class="btn btn-default prev-step">Précédent</button></li>
+                            <li><button type="submit" class="btn btn-primary btn-info-full next-step">Enregistrer</button></li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </form>
+        </div>
+      </div>	 
+    </div>
+  </div>
+</section>
+<!-- ================ End Profile Settings ======================= --> 
+
+<!-- ================= footer start ========================= -->
+<footer class="footer">
+  <div class="container"> 
+    <div class="row">
+	  <div class="col-md-4 col-sm-4">
+        <a th:href="@{/index}"><img class="footer-logo" src="img/logo.png" alt="logo"></a>
+        <p>Lorem Ipsum is simply dummy text of printing and type setting industry. Lorem Ipsum been industry standard dummy text ever since.</p> 
+      </div>	
+      <div class="col-md-8 col-sm-8">
+        <div class="row">
+          <div class="col-md-4 col-sm-6">
+            <h4>Informations</h4>
+            <ul>
+              <li><a target="_blank" href="http://localhost/GuichetOrientationInsertion/propos.php"><i class="fa fa-angle-double-right"></i> Qui sommes-nous?</a></li>
+              <li><a target="_blank" href="http://localhost/GuichetOrientationInsertion/contact.php"><i class="fa fa-angle-double-right"></i> Support</a></li>
+              <li><a target="_blank" href="http://localhost/GuichetOrientationInsertion/contact.php"><i class="fa fa-angle-double-right"></i> Contact</a></li>
+            </ul>
+          </div>
+		  <div class="col-md-4 col-sm-6">
+            <h4>Conditions</h4>
+            <ul>
+              <li><a target="_blank" href="#"><i class="fa fa-angle-double-right"></i> Conditions Générales d'utilisation</a></li>
+              <li><a target="_blank" href="#"><i class="fa fa-angle-double-right"></i> Données personnelles</a></li>
+              <li><a target="_blank" href="#"><i class="fa fa-angle-double-right"></i> Mention légale</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <h4>Réseaux sociaux</h4>
+            <p>Vous pouvez nous suivre sur facebook, linkedin, twitter et instagram.</p>
+            <div class="f-social-box">
+	          <ul>
+	            <li><a href="#"><i class="fa fa-facebook facebook-cl"></i></a></li>
+	            <li><a href="#"><i class="fa fa-linkedin linkedin-cl"></i></a></li>
+	            <li><a href="#"><i class="fa fa-twitter twitter-cl"></i></a></li>
+	            <li><a href="#"><i class="fa fa-instagram instagram-cl"></i></a></li>
+	          </ul>
+	        </div>    
+          </div>
+        </div>
+      </div>      
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="copyright text-center">
+          <p>© 2021 <a target="_blank" href="http://graim.sn/">GRAIM</a> Tous droits réservés.</p>		  
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div><a href="#" class="scrollup">Scroll</a></div>
+
+<!-- Jquery js--> 
+<script src="js/jquery.min.js"></script> 
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script> 
+<script src="plugins/bootstrap/js/bootsnav.js"></script> 
+<script src="js/viewportchecker.js"></script> 
+<script src="js/slick.js"></script> 
+<script src="plugins/bootstrap/js/wysihtml5-0.3.0.js"></script> 
+<script src="plugins/bootstrap/js/bootstrap-wysihtml5.js"></script> 
+<script src="plugins/aos-master/aos.js"></script> 
+<script src="plugins/nice-select/js/jquery.nice-select.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="js/custom.js"></script> 
+<script src="js/info.js"></script> 
+<script src="js/scripts.js"></script>
+<script>
+	$(window).load(function() {
+	  $(".page_preloader").fadeOut("slow");;
+	});	
+	AOS.init();
+</script> 
+<script>
+	$('#dob').dateDropper();
+</script>
+<script>
+	$('.btn btn-success').click(function(){
+		$('#form1').toggle();
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="fr">
+<head>
+	<meta name="author" content="">
+	<meta name="description" content="">
+	<meta http-equiv="Content-Type"content="text/html;charset=UTF-8"/>
+	<meta name="viewport"content="width=device-width, initial-scale=1.0">
+	<title>Guichet de d'offre et de demande d'emplois</title>
+	<!-- Favicon Icon -->
+	<link rel="shortcut icon" href="../static/img/favicon.png" th:href="@{/img/favicon.png}" />
+	<!-- CSS -->
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootstrap.min.css" th:href="@{/plugins/bootstrap/css/bootstrap.min.css}">
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootstrap-select.min.css" th:href="@{/plugins/bootstrap/css/bootstrap-select.min.css}">
+	<link rel="stylesheet" href="../static/plugins/icons/css/icons.css" th:href="@{/plugins/icons/css/icons.css}">
+	<link rel="stylesheet" href="../static/plugins/animate/animate.css" th:href="@{/plugins/animate/animate.css}">
+	<link rel="stylesheet" href="../static/plugins/bootstrap/css/bootsnav.css" th:href="@{/plugins/bootstrap/css/bootsnav.css}">
+	<link rel="stylesheet" href="../static/plugins/nice-select/css/nice-select.css" th:href="@{/plugins/nice-select/css/nice-select.css}">
+	<link rel="stylesheet" href="../static/plugins/aos-master/aos.css" th:href="@{/plugins/aos-master/aos.css}">
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	<link rel="stylesheet" href="../static/css/responsive.css" th:href="@{/css/responsive.css}">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap" rel="stylesheet"> 
+</head>
+<body class="utf_skin_area">
+<div class="page_preloader"></div>
+<!-- ======================= Start Navigation ===================== -->
+<nav class="navbar navbar-default navbar-mobile navbar-fixed light bootsnav">
+  <div class="container"> 
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu"> <i class="fa fa-bars"></i> </button>
+      <a class="navbar-brand" th:href="@{/index}"> <img th:src="@{/img/logo-light.png}" class="logo logo-display" alt="logo"> <img th:src="@{/img/logo.png}" class="logo logo-scrolled" alt="logo"> </a> 
+	</div>
+    <div class="collapse navbar-collapse" id="navbar-menu">
+      <ul class="nav navbar-nav navbar-left" data-in="fadeInDown" data-out="fadeOutUp">
+        <li class="dropdown"> <a th:href="@{/index}">Accueil</a> </li>
+        <li class="dropdown active"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Recruteurs</a>
+          <ul class="dropdown-menu animated fadeOutUp">
+            <li><a th:href="@{/entreprises}">Entreprises</a></li>
+            <li><a th:href="@{/formRecruteur}">Enregistrer son entreprise</a></li>
+            <li><a th:href="@{/formEmploi}">Publier une annonce</a></li>
+          </ul>
+        </li>
+        <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Candidats</a>
+          <ul class="dropdown-menu animated fadeOutUp">
+            <li><a th:href="@{/candidats}">Candidats</a></li>
+            <li><a th:href="@{/listeEmplois}">Offres d'emploi</a></li>
+            <li><a th:href="@{/profil}">Mon compte</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="br-right">
+        	<a class="btn-signup red-btn" th:if="${#request.userPrincipal==null}" th:href="@{/connexion}" data-target="#signin"><i class="login-icon ti-user"></i>Connexion</a>
+        	<a class="btn-signup red-btn" th:if="${#request.userPrincipal!=null}" th:href="@{/logout}"><i class="login-icon ti-user"></i>Déconnexion</a>
+        </li>
+        <li class="sign-up"><a class="btn-signup red-btn" th:href="@{/form}"><span class="ti-briefcase"></span>Inscription</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- ======================= End Navigation ===================== --> 
+
+<!-- ======================= Start Page Title ===================== -->
+<div class="page-title">
+  <div class="container">
+    <div class="page-caption">
+      <h2>Entreprises</h2>
+      <p><a href="#" title="Accueil">Accueil</a> <i class="ti-angle-double-right"></i> Recruteurs <i class="ti-angle-double-right"></i> Entreprises</p>
+    </div>
+  </div>
+</div>
+<!-- ======================= End Page Title ===================== --> 
+
+<!-- ======================= Start All Employee ===================== -->
+<section class="padd-top-80 padd-bot-80">
+  <div class="container"> 
+    <div class="row">
+     <div class="tab-content"> 
+        <!-- Single Employer List -->
+        <div class="col-md-3 col-sm-6 col-xs-12" th:each="e:${listeRecruteurs}">
+          <div class="contact-box">
+            <div class="utf_flexbox_area mrg-l-10">
+              <label class="toggler toggler-danger">
+                <input type="checkbox">
+                <i class="fa fa-heart"></i> 
+		      </label>
+            </div>
+            <div class="contact-img"> <img th:src="@{${e.logoPath}}" class="img-responsive" th:alt="${e.entreprise}" style="width: 60px; height: 40px; margin: 15px;"> </div>
+            <div class="contact-caption">
+              <a target="_blank" th:href="${e.site_web}" th:text="${e.entreprise}"></a>
+              <span th:text="${e.adresse}"></span> /
+              <span th:text="${e.region.nom}"></span>
+			</div>
+          </div>
+        </div>
+		<div class="clearfix"></div>
+        <div class="utf_flexbox_area padd-0" th:each="e:${listeRecruteurs}" th:if="${e.id != null}">
+			<ul class="pagination">
+			  <li th:class="${status.index==pageCourante} ? 'active' : ''" th:each="p,status:${pages}">
+			   <a class="page-link" th:href="@{/entreprises(page=${status.index})}" th:text="${status.index}"> </a>
+			  </li>
+			</ul>
+		</div>
+     </div>
+	</div>
+    <!-- Tab panels -->     
+  </div>
+</section>
+<!-- ====================== End All Employee ================ --> 
+
+<!-- ================= footer start ========================= -->
+<footer class="footer">
+  <div class="container"> 
+    <div class="row">
+	  <div class="col-md-4 col-sm-4">
+        <a th:href="@{/index}"><img class="footer-logo" src="img/logo.png" alt="logo"></a>
+        <p>Lorem Ipsum is simply dummy text of printing and type setting industry. Lorem Ipsum been industry standard dummy text ever since.</p> 
+      </div>	
+      <div class="col-md-8 col-sm-8">
+        <div class="row">
+          <div class="col-md-4 col-sm-6">
+            <h4>Informations</h4>
+            <ul>
+              <li><a target="_blank" href="http://localhost/GuichetOrientationInsertion/propos.php"><i class="fa fa-angle-double-right"></i> Qui sommes-nous?</a></li>
+              <li><a target="_blank" href="http://localhost/GuichetOrientationInsertion/contact.php"><i class="fa fa-angle-double-right"></i> Support</a></li>
+              <li><a target="_blank" href="http://localhost/GuichetOrientationInsertion/contact.php"><i class="fa fa-angle-double-right"></i> Contact</a></li>
+            </ul>
+          </div>
+		  <div class="col-md-4 col-sm-6">
+            <h4>Conditions</h4>
+            <ul>
+              <li><a target="_blank" href="#"><i class="fa fa-angle-double-right"></i> Conditions Générales d'utilisation</a></li>
+              <li><a target="_blank" href="#"><i class="fa fa-angle-double-right"></i> Données personnelles</a></li>
+              <li><a target="_blank" href="#"><i class="fa fa-angle-double-right"></i> Mention légale</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4 col-sm-6">
+            <h4>Réseaux sociaux</h4>
+            <p>Vous pouvez nous suivre sur facebook, linkedin, twitter et instagram.</p>
+            <div class="f-social-box">
+	          <ul>
+	            <li><a href="#"><i class="fa fa-facebook facebook-cl"></i></a></li>
+	            <li><a href="#"><i class="fa fa-linkedin linkedin-cl"></i></a></li>
+	            <li><a href="#"><i class="fa fa-twitter twitter-cl"></i></a></li>
+	            <li><a href="#"><i class="fa fa-instagram instagram-cl"></i></a></li>
+	          </ul>
+	        </div>    
+          </div>
+        </div>
+      </div>      
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="copyright text-center">
+          <p>© 2021 <a target="_blank" href="http://graim.sn/">GRAIM</a> Tous droits réservés.</p>		  
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div><a href="#" class="scrollup">Scroll</a></div>
+
+<!-- Jquery js--> 
+<script src="js/jquery.min.js"></script> 
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script> 
+<script src="plugins/bootstrap/js/bootsnav.js"></script> 
+<script src="js/viewportchecker.js"></script> 
+<script src="js/slick.js"></script> 
+<script src="plugins/bootstrap/js/bootstrap-wysihtml5.js"></script> 
+<script src="plugins/aos-master/aos.js"></script> 
+<script src="plugins/nice-select/js/jquery.nice-select.min.js"></script> 
+<script src="js/custom.js"></script> 
+<script>
+	$(window).load(function() {
+	  $(".page_preloader").fadeOut("slow");;
+	});
+	AOS.init();
+</script>
+</body>
+</html>
